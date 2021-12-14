@@ -1,9 +1,11 @@
 package com.bridgeit.emppayroll;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class EmployeePayRoll {
+public class EmployeePayRoll implements Serializable {
 
+	private static final long serialVersionUID = 1L;
 	public int id;
 	public String employeeName;
 	public double salary;
@@ -19,5 +21,4 @@ public class EmployeePayRoll {
 	public String toString() {
 		return "EmployeePayRoll [id=" + id + ", employeeName=" + employeeName + ", salary=" + salary + "]";
 	}
-
 }
