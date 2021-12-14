@@ -1,49 +1,68 @@
+
 package com.bridgeit.emppayroll;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class EmployeePayRollService {
-	
-	List<EmployeePayRoll> employeeList;
-	
+
+	private static final String HOME = "data/abc/demo.txt";
+
+	static List<EmployeePayRoll> employeeList;
+
 	public EmployeePayRollService() {
-		
+
 	}
-	
+
 	public EmployeePayRollService(List<EmployeePayRoll> employeeList) {
 
-		this.employeeList = employeeList;
+		EmployeePayRollService.employeeList = employeeList;
 	}
-
-
 
 	public static void main(String[] args) throws IOException {
-		
-//		ArrayList<EmployeePayRoll> arrayList = new ArrayList<>();
-//		EmployeePayRollService employeePayRollService = new EmployeePayRollService(arrayList);
-//		Scanner consoleInputReader = new Scanner(System.in);
-//		employeePayRollService.readEmployeeData(consoleInputReader);
-//		employeePayRollService.writeEmployeeData();
-		
-		String home = "data/abc/abc.txt";
-		Path path = Paths.get(home);
-		System.out.println(Files.exists(path));
-		//Files.delete(path);
-		System.out.println(Files.exists(path));
-		
-		//Files.createDirectories(path);
-		Files.createFile(path);
+
+		ArrayList<EmployeePayRoll> arrayList = new ArrayList<>();
+		EmployeePayRollService employeePayRollService = new EmployeePayRollService(arrayList);
+		Scanner consoleInputReader = new Scanner(System.in);
+		employeePayRollService.readEmployeeData(consoleInputReader);
+		System.out.println("enter 1 : to consol \n enter 2 : to file ");
+		int num = consoleInputReader.nextInt();
+		if(num==1)
+			employeePayRollService.writeEmployeeData(IOService.CONSOLE_IO);
+		else
+			employeePayRollService.writeEmployeeData(IOService.fILE_IO);
 	}
 
-	private void writeEmployeeData() {
+	private void writeEmployeeData(IOService ioService) throws IOException {
 
-		System.out.println("writing employee pay roll into consol \n " + employeeList);
+		if (ioService.equals(IOService.CONSOLE_IO))
+			System.out.println("writing employee pay roll into consol \n " + employeeList);
+		else
+			writeEmployeeDataToIOFile();
+	}
+
+	private void writeEmployeeDataToIOFile() throws IOException {
+
+		//write the data into file
+		FileOutputStream fileOutputStream = new FileOutputStream(HOME);
+		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+		StringBuffer stringBuffer = new StringBuffer();
+
+		employeeList.stream().forEach(e -> {
+			String emp = e.toString().concat("\n");
+			stringBuffer.append(emp);
+		});
+		
+		objectOutputStream.write(stringBuffer.toString().getBytes());
+		objectOutputStream.close();
 	}
 
 	private void readEmployeeData(Scanner consoleInputReader) {
@@ -55,7 +74,6 @@ public class EmployeePayRollService {
 		System.out.println("enter empoyee salary ");
 		double salary = consoleInputReader.nextDouble();
 		employeeList.add(new EmployeePayRoll(id, name, salary));
-		
-		
+		employeeList.add(new EmployeePayRoll(id, name, salary));
 	}
 }
