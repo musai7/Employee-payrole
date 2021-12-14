@@ -2,7 +2,6 @@
 package com.bridgeit.emppayroll;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -61,8 +60,18 @@ public class EmployeePayRollService {
 			stringBuffer.append(emp);
 		});
 		
-		objectOutputStream.write(stringBuffer.toString().getBytes());
+		objectOutputStream.writeObject(stringBuffer);
 		objectOutputStream.close();
+		
+		//to read the data from file
+		FileInputStream fileInputStream = new FileInputStream(HOME);
+		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+		try {
+			Object object = objectInputStream.readObject();
+			objectInputStream.close();
+			System.out.println(object);
+		} catch (Exception e1) {
+		}
 	}
 
 	private void readEmployeeData(Scanner consoleInputReader) {
