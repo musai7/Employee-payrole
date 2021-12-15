@@ -1,11 +1,11 @@
 
 package com.bridgeit.emppayroll;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -33,10 +33,12 @@ public class EmployeePayRollService {
 		employeePayRollService.readEmployeeData(consoleInputReader);
 		System.out.println("enter 1 : to consol \n enter 2 : to file ");
 		int num = consoleInputReader.nextInt();
-		if(num==1)
+		if (num == 1) {
 			employeePayRollService.writeEmployeeData(IOService.CONSOLE_IO);
-		else
+		} else {
 			employeePayRollService.writeEmployeeData(IOService.fILE_IO);
+		}
+		System.out.println("no of entries are : "+employeePayRollService.countEntries());
 	}
 
 	private void writeEmployeeData(IOService ioService) throws IOException {
@@ -49,28 +51,21 @@ public class EmployeePayRollService {
 
 	private void writeEmployeeDataToIOFile() throws IOException {
 
-		//write the data into file
-		FileOutputStream fileOutputStream = new FileOutputStream(HOME);
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
+		// write the data into file
 		StringBuffer stringBuffer = new StringBuffer();
-
 		employeeList.stream().forEach(e -> {
 			String emp = e.toString().concat("\n");
 			stringBuffer.append(emp);
 		});
-		
-		objectOutputStream.writeObject(stringBuffer);
-		objectOutputStream.close();
-		
-		//to read the data from file
-		FileInputStream fileInputStream = new FileInputStream(HOME);
-		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-		try {
-			Object object = objectInputStream.readObject();
-			objectInputStream.close();
-			System.out.println(object);
-		} catch (Exception e1) {
+
+		PrintWriter printWriter = new PrintWriter(HOME);
+		printWriter.write(stringBuffer.toString());
+		printWriter.close();
+		@SuppressWarnings("resource")
+		FileReader fileReader = new FileReader(HOME);
+		int ch;
+		while ((ch = fileReader.read()) != -1) {
+			System.out.print((char) ch);
 		}
 	}
 
@@ -84,5 +79,12 @@ public class EmployeePayRollService {
 		double salary = consoleInputReader.nextDouble();
 		employeeList.add(new EmployeePayRoll(id, name, salary));
 		employeeList.add(new EmployeePayRoll(id, name, salary));
+	}
+
+	public long countEntries() throws IOException {
+
+		long entries = 0;
+		entries = Files.lines(new File("data/abc/demo.txt").toPath()).count();
+		return entries;
 	}
 }
