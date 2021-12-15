@@ -1,2 +1,3 @@
-EmployeePayRoll [id=1, employeeName=2, salary=3.0]
-EmployeePayRoll [id=1, employeeName=2, salary=3.0]
+EmployeePayRoll [id=1, employeeName=musai, salary=25000.0]
+EmployeePayRoll [id=2, employeeName=mani, salary=35000.0]
+EmployeePayRoll [id=1, employeeName=gana, salary=45000.0]
