@@ -2,6 +2,7 @@
 package com.bridgeit.emppayroll;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,10 +39,10 @@ public class EmployeePayRollService {
 		} else {
 			employeePayRollService.writeEmployeeData(IOService.fILE_IO);
 		}
-		System.out.println("no of entries are : "+employeePayRollService.countEntries());
+		System.out.println("no of entries are : " + employeePayRollService.countEntries());
 	}
 
-	private void writeEmployeeData(IOService ioService) throws IOException {
+	public void writeEmployeeData(IOService ioService) throws IOException {
 
 		if (ioService.equals(IOService.CONSOLE_IO))
 			System.out.println("writing employee pay roll into consol \n " + employeeList);
@@ -49,7 +50,7 @@ public class EmployeePayRollService {
 			writeEmployeeDataToIOFile();
 	}
 
-	private void writeEmployeeDataToIOFile() throws IOException {
+	public void writeEmployeeDataToIOFile() throws IOException {
 
 		// write the data into file
 		StringBuffer stringBuffer = new StringBuffer();
@@ -61,6 +62,9 @@ public class EmployeePayRollService {
 		PrintWriter printWriter = new PrintWriter(HOME);
 		printWriter.write(stringBuffer.toString());
 		printWriter.close();
+	}
+
+	public void printTheFile() throws IOException {
 		@SuppressWarnings("resource")
 		FileReader fileReader = new FileReader(HOME);
 		int ch;
